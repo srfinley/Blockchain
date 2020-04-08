@@ -137,7 +137,23 @@ blockchain = Blockchain()
 def mine():
     # Run the proof of work algorithm to get the next proof
     # proof = blockchain.proof_of_work()
-    proof = request.get_json()['proof']
+
+    # check that input is well-formed
+    try:
+        proof = request.get_json()['proof']
+    except KeyError:
+        response = {
+            'message': "No proof"
+        }
+        return jsonify(response), 400
+
+    try:
+        id = request.get_json()['id']
+    except KeyError:
+        response = {
+            'message': "No id"
+        }
+        return jsonify(response), 400
 
     # checking the miner's work
     block_string = json.dumps(blockchain.last_block, sort_keys=True)
