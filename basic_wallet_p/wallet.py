@@ -5,6 +5,19 @@ import requests
 from colorama import init, Fore, Back, Style
 
 
+def transact(node, sender, recipient, amount):
+    endpoint = f"{node}/transactions/new"
+
+    post_data = {
+        'sender': sender,
+        'recipient': recipient,
+        'amount': int(amount)
+    }
+
+    r = requests.post(url=endpoint, json=post_data)
+    print(r)
+
+
 if __name__ == '__main__':
     init()
     # What is the server address? IE `python3 wallet.py https://server.com/
@@ -36,6 +49,18 @@ if __name__ == '__main__':
         print(f"{user} has {Back.GREEN}{total}{Style.RESET_ALL} Lambdacoins.")
         print("To make another query, enter a username.")
         print("To exit, enter 'x'")
+        print("To make a transaction, enter 'transaction'")
         user = input()
         if user == 'x':
             break
+        if user == 'transaction':
+            print("Sending user:")
+            sender = input()
+            print("Receiving user:")
+            recipient = input()
+            print("Amount:")
+            amount = input()
+            print(f"Sending {amount} from {sender} to {recipient}...")
+            transact(node, sender, recipient, amount)
+            print(f"Let's see if {recipient} has received it yet.")
+            user = recipient
