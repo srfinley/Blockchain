@@ -2,8 +2,11 @@
 import sys
 import requests
 
+from colorama import init, Fore, Back, Style
+
 
 if __name__ == '__main__':
+    init()
     # What is the server address? IE `python3 wallet.py https://server.com/
     if len(sys.argv) > 1:
         node = sys.argv[1]
@@ -25,12 +28,12 @@ if __name__ == '__main__':
             for act in acts:
                 if act['sender'] == user or act['recipient'] == user:
                     if act['sender'] == user:
-                        print(f"{user} sent {act['amount']} to {act['recipient']}")
+                        print(f"{user} sent {Fore.RED}{act['amount']}{Style.RESET_ALL} to {act['recipient']}")
                         total -= act['amount']
                     if act['recipient'] == user:
-                        print(f"{user} received {act['amount']} from {act['sender']}")
+                        print(f"{user} received {Fore.GREEN}{act['amount']}{Style.RESET_ALL} from {act['sender']}")
                         total += act['amount']
-        print(f"{user} has {total} Lambdacoins.")
+        print(f"{user} has {Back.GREEN}{total}{Style.RESET_ALL} Lambdacoins.")
         print("To make another query, enter a username.")
         print("To exit, enter 'x'")
         user = input()
