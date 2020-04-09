@@ -10,20 +10,29 @@ if __name__ == '__main__':
     else:
         node = "http://localhost:5000"
 
-    r = requests.get(url=node + "/chain")
-
-    chain = r.json()
-
+    print("Welcome to the Lambdacoin wallet!")
+    print("For which user would you like wallet information?")
     user = input()
-    total = 0
+    while True:
+        print("Running a fresh query to get you the latest information...")
+        r = requests.get(url=node + "/chain")
+        chain = r.json()
 
-    for block in chain['chain']:
-        acts = block['transactions']
-        for act in acts:
-            if act['sender'] == user or act['recipient'] == user:
-                # print("found s-f's transaction")
-                if act['sender'] == user:
-                    total -= act['amount']
-                if act['recipient'] == user:
-                    total += act['amount']
-    print(total)
+        total = 0
+
+        for block in chain['chain']:
+            acts = block['transactions']
+            for act in acts:
+                if act['sender'] == user or act['recipient'] == user:
+                    if act['sender'] == user:
+                        print(f"{user} sent {act['amount']} to {act['recipient']}")
+                        total -= act['amount']
+                    if act['recipient'] == user:
+                        print(f"{user} received {act['amount']} from {act['sender']}")
+                        total += act['amount']
+        print(f"{user} has {total} Lambdacoins.")
+        print("To make another query, enter a username.")
+        print("To exit, enter 'x'")
+        user = input()
+        if user == 'x':
+            break
