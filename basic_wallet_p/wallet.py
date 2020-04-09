@@ -15,7 +15,7 @@ def transact(node, sender, recipient, amount):
     }
 
     r = requests.post(url=endpoint, json=post_data)
-    print(r)
+    return r
 
 
 if __name__ == '__main__':
@@ -26,7 +26,7 @@ if __name__ == '__main__':
     else:
         node = "http://localhost:5000"
 
-    print("Welcome to the Lambdacoin wallet!")
+    print("Welcome to the Salambdacoin wallet!")
     print("For which user would you like wallet information?")
     user = input()
     while True:
@@ -46,7 +46,7 @@ if __name__ == '__main__':
                     if act['recipient'] == user:
                         print(f"{user} received {Fore.GREEN}{act['amount']}{Style.RESET_ALL} from {act['sender']}")
                         total += act['amount']
-        print(f"{user} has {Back.GREEN}{total}{Style.RESET_ALL} Lambdacoins.")
+        print(f"{user} has {Back.GREEN}{total}{Style.RESET_ALL} Salambdacoins.")
         print("To make another query, enter a username.")
         print("To exit, enter 'x'")
         print("To make a transaction, enter 'transaction'")
@@ -61,6 +61,7 @@ if __name__ == '__main__':
             print("Amount:")
             amount = input()
             print(f"Sending {amount} from {sender} to {recipient}...")
-            transact(node, sender, recipient, amount)
+            r = transact(node, sender, recipient, amount)
+            print(f"{Back.GREEN}{r.json()['message']}{Style.RESET_ALL}")
             print(f"Let's see if {recipient} has received it yet.")
             user = recipient
